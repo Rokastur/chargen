@@ -12,12 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Role {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+public class Role extends BaseEntity{
 
     private String name;
 
