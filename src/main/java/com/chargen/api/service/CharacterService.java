@@ -4,21 +4,25 @@ import com.chargen.api.controller.dto.CharacterDto;
 import com.chargen.api.entity.Account;
 import com.chargen.api.entity.character.Character;
 import com.chargen.api.entity.character.CharacterClass;
+import com.chargen.api.entity.character.ability.Ability;
+import com.chargen.api.entity.character.ability.AbilityScore;
 import com.chargen.api.repository.AccountRepository;
 import com.chargen.api.repository.CharacterRepository;
+import com.chargen.api.utility.DiceRoller;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
+@AllArgsConstructor
 public class CharacterService {
 
     private final CharacterRepository characterRepository;
 
     private final AccountRepository accountRepository;
 
-    public CharacterService(CharacterRepository characterRepository, AccountRepository accountRepository) {
-        this.characterRepository = characterRepository;
-        this.accountRepository = accountRepository;
-    }
+    private final DiceRoller diceRoller = new DiceRoller();
 
     public Character createCharacter(CharacterDto characterDto, String username) {
         Account account = accountRepository.findByUsername(username).get(); //TODO: deal with optional
@@ -31,6 +35,16 @@ public class CharacterService {
             characterClass.setExperiencePoints(characterClassDto.getExperience());
             account.addCharacter(character);
         }
+
+        for (Ability ability : Ability.values()) {
+            AbilityScore abilityScore = new AbilityScore();
+            abilityScore.setAbility(ability);
+            int[] diceRollResult = diceRoller.roll(6, 4, true);
+            int diceRollSum = Arrays.stream(diceRollResult).sum();
+            abilityScore.setScore(diceRollSum);
+            character.addAbilityScore(abilityScore);
+        }
+
         return characterRepository.save(character);
     }
 }
