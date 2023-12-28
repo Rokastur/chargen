@@ -6,7 +6,9 @@ import com.chargen.api.security.user.AccountDetails;
 import com.chargen.api.service.AccountService;
 import com.chargen.api.service.dto.AccountDto;
 import com.chargen.api.service.dto.JwtResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,17 +20,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
+@AllArgsConstructor
 public class AuthController {
 
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private final AccountService accountService;
-
-    public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, AccountService accountService) {
-        this.jwtUtils = jwtUtils;
-        this.authenticationManager = authenticationManager;
-        this.accountService = accountService;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerAccount(@RequestBody AccountDto accountDto) {
@@ -44,15 +41,11 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtTokenForUser(authentication);
         AccountDetails accountDetails = (AccountDetails) authentication.getPrincipal();
         List<String> roles = accountDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-        return ResponseEntity.ok(new JwtResponse(
-                accountDetails.getId(),
-                accountDetails.getUsername(),
-                jwt,
-                roles
-        ));
+        return ResponseEntity.ok(new JwtResponse(accountDetails.getUsername(), jwt, roles));
     }
 
     //TODO: remove later. temp method to test things
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/accounts")
     public ResponseEntity<?> displayAccounts() {
         List<Account> accounts = accountService.getAllAccounts();
