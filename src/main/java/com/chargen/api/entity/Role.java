@@ -14,7 +14,8 @@ import java.util.List;
 @Setter
 public class Role extends BaseEntity{
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private ERole role;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "roles")

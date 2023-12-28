@@ -1,9 +1,9 @@
 package com.chargen.api.repository;
 
+import com.chargen.api.entity.ERole;
 import com.chargen.api.entity.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends org.springframework.data.jpa.repository.JpaRepository<Role, Long> {
 
-    Role findByName(String name);
+    Role findByRole(ERole role);
 }

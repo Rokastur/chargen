@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
@@ -19,40 +18,22 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class AccountDetails implements UserDetails {
 
-    private Long id;
-
-    private String username;
-
-    private String password;
-
-    private Collection<GrantedAuthority> authorities;
-
-    public static AccountDetails buildAccountDetails(Account account) {
-        List<GrantedAuthority> authorities = account.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-        return new AccountDetails(
-                account.getId(),
-                account.getUsername(),
-                account.getPassword(),
-                authorities);
-
-    }
+    private Account account;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return account.getAuthorities()
+                .stream().map(a -> new SimpleGrantedAuthority(a.getName()))
+                .collect(Collectors.toSet());
     }
-
     @Override
     public String getPassword() {
-        return password;
+        return account.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return account.getUsername();
     }
 
     @Override

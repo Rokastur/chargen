@@ -1,6 +1,7 @@
 package com.chargen.api.service;
 
 import com.chargen.api.entity.Account;
+import com.chargen.api.entity.ERole;
 import com.chargen.api.entity.Role;
 import com.chargen.api.repository.AccountRepository;
 import com.chargen.api.repository.RoleRepository;
@@ -30,7 +31,7 @@ public class AccountService {
         account.setUsername(accountDto.getUsername());
         account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         System.out.println("pass: " + account.getPassword());
-        Role userRole = roleRepository.findByName("ROLE_USER");
+        Role userRole = roleRepository.findByRole(ERole.ROLE_USER);
         userRole.assignToAccount(account);
         return accountRepository.save(account);
     }
