@@ -1,6 +1,7 @@
 package com.chargen.api.entity.character.ability;
 
 import com.chargen.api.entity.BaseEntity;
+import com.chargen.api.entity.character.Race;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,4 +21,8 @@ public class AbilityScoreModifier extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private AbilityScore abilityScore;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Race race;
 }

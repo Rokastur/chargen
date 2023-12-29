@@ -9,7 +9,6 @@ import com.chargen.api.entity.character.ability.EAbility;
 import com.chargen.api.repository.AccountRepository;
 import com.chargen.api.repository.CharacterClassRepository;
 import com.chargen.api.repository.CharacterRepository;
-import com.chargen.api.repository.RaceRepository;
 import com.chargen.api.utility.DiceRoller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class CharacterService {
 
     private final CharacterClassRepository characterClassRepository;
 
-    private final RaceRepository raceRepository;
+    private final RaceService raceService;
 
     private final DiceRoller diceRoller = new DiceRoller();
 
@@ -69,21 +68,13 @@ public class CharacterService {
     }
 
     private void setRace(CharacterDto characterDto, Character character) {
-        String suppliedRace = characterDto.getRace();
-        Race race;
-        ERace coreRace = null;
-        try {
-            coreRace = ERace.valueOf(suppliedRace.toUpperCase());
-            race = raceRepository.findByRace(coreRace.name());
-        } catch (IllegalArgumentException ex) {
-            race = raceRepository.findByRace(suppliedRace);
-        }
+        Race race = raceService.findRaceByName(characterDto.getRace());
 
         if (race == null) {
             race = new Race();
-            race.setRace(coreRace == null ? suppliedRace : coreRace.name());
+            race.setRace(characterDto.getRace());
         }
-        raceRepository.save(race);
+        raceService.saveRace(race);
         race.setCharacter(character);
     }
 

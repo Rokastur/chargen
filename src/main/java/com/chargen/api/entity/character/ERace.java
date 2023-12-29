@@ -13,6 +13,7 @@ public enum ERace {
     HALFLING,
     HALF_ORC,
     HUMAN,
+    VARIANT_HUMAN,
     TIEFLING,
 
 }
