@@ -1,12 +1,14 @@
 package com.chargen.api.entity.character;
 
 import com.chargen.api.entity.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import com.chargen.api.entity.character.ability.AbilityScoreModifier;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -14,6 +16,16 @@ import lombok.Setter;
 public class Race extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
     private Character character;
+
+    private String race;
+
+    @OneToMany(
+            mappedBy = "race",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonManagedReference
+    private Set<AbilityScoreModifier> modifiers = new HashSet<>();
+
 }
