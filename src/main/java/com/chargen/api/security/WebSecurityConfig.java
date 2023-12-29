@@ -34,8 +34,7 @@ public class WebSecurityConfig {
     private static final String[] WHITE_LIST = {
             "/auth/register",
             "/auth/login",
-            "/auth/accounts",
-            "/character/new"
+            "/auth/accounts"
     };
 
     @Bean
@@ -83,7 +82,6 @@ public class WebSecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
 
 
 }

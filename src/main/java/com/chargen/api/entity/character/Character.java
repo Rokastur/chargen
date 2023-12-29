@@ -63,6 +63,18 @@ public class Character extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "language_id"))
     private Set<Language> languages = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Background background;
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "character_feats",
+        joinColumns = @JoinColumn(name = "character_id"),
+        inverseJoinColumns = @JoinColumn(name = "feat_id"))
+    private Set<Feat> feats = new HashSet<>();
+
 
     public void addAbilityScore(AbilityScore abilityScore) {
         abilityScores.add(abilityScore);
