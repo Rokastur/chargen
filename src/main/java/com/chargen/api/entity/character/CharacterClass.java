@@ -19,7 +19,7 @@ public class CharacterClass extends BaseEntity {
 
     public CharacterClass(EClass name) {
         this.name = name;
-        hitDice = initializeHitDice(name);
+        hitDie = initializeHitDice(name);
     }
 
     @Enumerated(EnumType.STRING)
@@ -29,7 +29,7 @@ public class CharacterClass extends BaseEntity {
 
     private Integer experiencePoints;
 
-    private Integer hitDice;
+    private Integer hitDie;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
