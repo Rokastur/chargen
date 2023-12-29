@@ -1,4 +1,4 @@
-package com.chargen.api.entity.items;
+package com.chargen.api.entity;
 
 public enum Source {
 

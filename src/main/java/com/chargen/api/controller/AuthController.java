@@ -8,7 +8,6 @@ import com.chargen.api.service.dto.AccountDto;
 import com.chargen.api.service.dto.JwtResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -45,7 +44,6 @@ public class AuthController {
     }
 
     //TODO: remove later. temp method to test things
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/accounts")
     public ResponseEntity<?> displayAccounts() {
         List<Account> accounts = accountService.getAllAccounts();

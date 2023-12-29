@@ -1,13 +1,18 @@
 package com.chargen.api.entity.character.ability;
 
 import com.chargen.api.entity.BaseEntity;
+import com.chargen.api.entity.character.Feat;
 import com.chargen.api.entity.character.Race;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,4 +30,8 @@ public class AbilityScoreModifier extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private Race race;
+
+    @ManyToMany(mappedBy = "abilityScoreModifiers")
+    @JsonBackReference
+    private Set<Feat> feats = new HashSet<>();
 }
