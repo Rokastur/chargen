@@ -3,6 +3,7 @@ package com.chargen.api.entity.character;
 import com.chargen.api.entity.Account;
 import com.chargen.api.entity.BaseEntity;
 import com.chargen.api.entity.character.ability.AbilityScore;
+import com.chargen.api.entity.character.ability.AbilityScoreModifier;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,6 +19,13 @@ import java.util.Set;
 public class Character extends BaseEntity {
 
     private String name;
+
+    private boolean inspiration;
+
+    private int proficiencyBonus;
+
+    @Embedded
+    private CharacterDescription description;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -38,6 +46,15 @@ public class Character extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private EAlignment alignment;
+
+    @OneToMany(
+            mappedBy = "character",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonManagedReference
+    private Set<Skill> skills = new HashSet<>();
+
 
     public void addAbilityScore(AbilityScore abilityScore) {
         abilityScores.add(abilityScore);
