@@ -17,7 +17,7 @@ import java.util.Set;
 public class AbilityScore extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
-    private Ability ability;
+    private EAbility EAbility;
 
     private int score;
 

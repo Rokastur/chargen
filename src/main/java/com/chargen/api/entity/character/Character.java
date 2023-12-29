@@ -36,6 +36,9 @@ public class Character extends BaseEntity {
     @JsonManagedReference
     private Set<AbilityScore> abilityScores = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    private EAlignment alignment;
+
     public void addAbilityScore(AbilityScore abilityScore) {
         abilityScores.add(abilityScore);
         abilityScore.setCharacter(this);

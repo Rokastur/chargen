@@ -14,6 +14,8 @@ import lombok.Setter;
 public class Race extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
     private Character character;
+
+    private String race;
+
 }
