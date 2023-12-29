@@ -3,7 +3,6 @@ package com.chargen.api.entity.character;
 import com.chargen.api.entity.Account;
 import com.chargen.api.entity.BaseEntity;
 import com.chargen.api.entity.character.ability.AbilityScore;
-import com.chargen.api.entity.character.ability.AbilityScoreModifier;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -54,6 +53,15 @@ public class Character extends BaseEntity {
     )
     @JsonManagedReference
     private Set<Skill> skills = new HashSet<>();
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "character_languages",
+            joinColumns = @JoinColumn(name = "character_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_id"))
+    private Set<Language> languages = new HashSet<>();
 
 
     public void addAbilityScore(AbilityScore abilityScore) {
