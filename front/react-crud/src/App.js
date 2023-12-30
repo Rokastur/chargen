@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          chargenasda
+          chargenasda adas
         </a>
       </header>
     </div>
