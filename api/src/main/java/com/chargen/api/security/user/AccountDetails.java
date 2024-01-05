@@ -20,6 +20,10 @@ public class AccountDetails implements UserDetails {
 
     private Account account;
 
+    public Long getAccountId() {
+        return this.account.getId();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return account.getAuthorities()
