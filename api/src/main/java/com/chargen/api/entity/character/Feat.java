@@ -1,6 +1,7 @@
 package com.chargen.api.entity.character;
 
 import com.chargen.api.entity.BaseEntity;
+import com.chargen.api.entity.Ruleset;
 import com.chargen.api.entity.Source;
 import com.chargen.api.entity.character.ability.AbilityScoreModifier;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -35,6 +36,9 @@ public class Feat extends BaseEntity {
     @ManyToMany(mappedBy = "feats")
     @JsonBackReference
     private Set<Character> characters = new HashSet<>();
+
+    @ManyToMany(mappedBy = "allowedFeats")
+    private Set<Ruleset> rulesets = new HashSet<>();
 
     public void addAbilityScoreModifier(AbilityScoreModifier abilityScoreModifier) {
         abilityScoreModifiers.add(abilityScoreModifier);

@@ -36,5 +36,8 @@ public class Campaign extends BaseEntity {
     @JsonManagedReference
     private Set<Character> characters = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ruleset ruleset;
+
 
 }
