@@ -1,6 +1,7 @@
 package com.chargen.api.entity.character;
 
 import com.chargen.api.entity.BaseEntity;
+import com.chargen.api.entity.Ruleset;
 import com.chargen.api.entity.items.Item;
 import com.chargen.api.entity.items.tools.Tool;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -51,4 +52,7 @@ public class Background extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "tool_id"))
     @JsonManagedReference
     private Set<Tool> toolProficiencies = new HashSet<>();
+
+    @ManyToMany(mappedBy = "allowedBackgrounds")
+    private Set<Ruleset> rulesets = new HashSet<>();
 }

@@ -1,6 +1,7 @@
 package com.chargen.api.entity.character;
 
 import com.chargen.api.entity.BaseEntity;
+import com.chargen.api.entity.Ruleset;
 import com.chargen.api.entity.character.ability.AbilityScoreModifier;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -27,5 +28,8 @@ public class Race extends BaseEntity {
     )
     @JsonManagedReference
     private Set<AbilityScoreModifier> modifiers = new HashSet<>();
+
+    @ManyToMany(mappedBy = "allowedRaces")
+    private Set<Ruleset> rulesets = new HashSet<>();
 
 }

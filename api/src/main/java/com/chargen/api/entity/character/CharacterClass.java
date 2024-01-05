@@ -1,6 +1,7 @@
 package com.chargen.api.entity.character;
 
 import com.chargen.api.entity.BaseEntity;
+import com.chargen.api.entity.Ruleset;
 import com.chargen.api.entity.character.ability.Ability;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,6 +40,9 @@ public class CharacterClass extends BaseEntity {
             joinColumns = @JoinColumn(name = "character_class_id"),
             inverseJoinColumns = @JoinColumn(name = "ability_id"))
     private Set<Ability> abilities = new HashSet<>();
+
+    @ManyToMany(mappedBy = "allowedClasses")
+    private Set<Ruleset> rulesets = new HashSet<>();
 
     private Integer initializeHitDice(EClass name) {
         return switch (name) {
