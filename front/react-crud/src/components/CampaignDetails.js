@@ -7,7 +7,6 @@ const CampaignDetails = () => {
   const [campaign, setCampaign] = useState(null);
 
   useEffect(() => {
-    console.log(campaign);
     CampaignService.viewOneCampaign(id)
       .then((response) => {
         setCampaign(response.data);

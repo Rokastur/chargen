@@ -7,6 +7,7 @@ import com.chargen.api.entity.character.*;
 import com.chargen.api.entity.character.ability.AbilityScore;
 import com.chargen.api.entity.character.ability.EAbility;
 import com.chargen.api.repository.AccountRepository;
+import com.chargen.api.repository.AlignmentRepository;
 import com.chargen.api.repository.CharacterClassRepository;
 import com.chargen.api.repository.CharacterRepository;
 import com.chargen.api.utility.DiceRoller;
@@ -30,25 +31,29 @@ public class CharacterService {
 
     private final CharacterClassRepository characterClassRepository;
 
+    private final AlignmentRepository alignmentRepository;
+
     private final RaceService raceService;
 
     private final DiceRoller diceRoller = new DiceRoller();
 
     //TODO: refactor, split into different methods with different responsibilities
-    public Character createCharacter(CharacterDto characterDto, String username) {
-        Account account = accountRepository.findByUsername(username).get(); //TODO: deal with optional
+    public Character createCharacter(CharacterDto characterDto, Account account) {
+        account = accountRepository.findAccountWithCharactersById(account.getId());
         Character character = new Character();
         character.setName(characterDto.getName());
 
-        setCharacterClasses(characterDto, account, character);
+        setCharacterClasses(characterDto, character);
         setAlignment(characterDto, character);
         setAbilityScores(character);
         setRace(characterDto, character);
 
+        account.addCharacter(character);
+
         return characterRepository.save(character);
     }
 
-    private void setCharacterClasses(CharacterDto characterDto, Account account, Character character) {
+    private void setCharacterClasses(CharacterDto characterDto, Character character) {
         List<CharacterClass> characterClasses = new ArrayList<>();
         for (CharacterDto.CharacterClassDto characterClassDto : characterDto.getCharacterClassDtos()) {
             CharacterClass characterClass;
@@ -60,7 +65,6 @@ public class CharacterService {
             characterClass.setLevel(characterClassDto.getLevel());
             characterClass.setExperiencePoints(characterClassDto.getExperience());
             characterClasses.add(characterClass);
-            account.addCharacter(character);
         }
 
         character.setCharacterClass(characterClasses);
@@ -69,21 +73,13 @@ public class CharacterService {
 
     private void setRace(CharacterDto characterDto, Character character) {
         Race race = raceService.findRaceByName(characterDto.getRace());
-
-        if (race == null) {
-            race = new Race();
-            race.setRace(characterDto.getRace());
-        }
-        raceService.saveRace(race);
-        race.setCharacter(character);
+        race.addCharacter(character);
     }
 
     private void setAlignment(CharacterDto characterDto, Character character) {
-        if (characterDto.getAlignment() == null) {
-            character.setAlignment(EAlignment.UNALIGNED);
-        } else {
-            character.setAlignment(characterDto.getAlignment());
-        }
+        Alignment alignment = alignmentRepository.findByName(characterDto.getAlignment());
+        character.setAlignment(alignment);
+
     }
 
     private void setAbilityScores(Character character) {
@@ -95,5 +91,28 @@ public class CharacterService {
             abilityScore.setScore(diceRollSum);
             character.addAbilityScore(abilityScore);
         }
+    }
+
+    public List<CharacterDto> listCharactersByAccount(Account account) {
+        List<Character> characters = characterRepository.findByAccount(account);
+        List<CharacterDto> characterDtos = new ArrayList<>();
+        for (Character character : characters) {
+            CharacterDto characterDto = new CharacterDto();
+            characterDto.setName(character.getName());
+            characterDto.setRace(characterDto.getRace());
+            //TODO: temp, fix alignment setting later.
+            characterDto.setAlignment(null);
+            List<CharacterDto.CharacterClassDto> characterClassDtos = new ArrayList<>();
+            for (CharacterClass characterClass : character.getCharacterClass()) {
+                CharacterDto.CharacterClassDto characterClassDto = new CharacterDto.CharacterClassDto();
+                characterClassDto.setName(characterClass.getName());
+                characterClassDto.setLevel(characterClass.getLevel());
+                characterClassDto.setExperience(characterClass.getExperiencePoints());
+                characterClassDtos.add(characterClassDto);
+            }
+            characterDto.setCharacterClassDtos(characterClassDtos);
+            characterDtos.add(characterDto);
+        }
+        return characterDtos;
     }
 }

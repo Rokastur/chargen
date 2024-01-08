@@ -4,6 +4,7 @@ import com.chargen.api.entity.BaseEntity;
 import com.chargen.api.entity.Ruleset;
 import com.chargen.api.entity.items.Item;
 import com.chargen.api.entity.items.tools.Tool;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -54,5 +55,6 @@ public class Background extends BaseEntity {
     private Set<Tool> toolProficiencies = new HashSet<>();
 
     @ManyToMany(mappedBy = "allowedBackgrounds")
+    @JsonBackReference
     private Set<Ruleset> rulesets = new HashSet<>();
 }

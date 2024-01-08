@@ -12,11 +12,13 @@ public class CampaignDto {
     private String name;
     private String description;
     private List<AccountDto> campaignAccounts;
+    private String ruleset;
 
-    public CampaignDto(Long id, String name, String description, List<AccountDto> campaignAccounts) {
+    public CampaignDto(Long id, String name, String description, String ruleset, List<AccountDto> campaignAccounts) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.ruleset = ruleset;
         this.campaignAccounts = campaignAccounts;
     }
 

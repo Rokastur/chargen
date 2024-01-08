@@ -38,6 +38,7 @@ public class Feat extends BaseEntity {
     private Set<Character> characters = new HashSet<>();
 
     @ManyToMany(mappedBy = "allowedFeats")
+    @JsonBackReference
     private Set<Ruleset> rulesets = new HashSet<>();
 
     public void addAbilityScoreModifier(AbilityScoreModifier abilityScoreModifier) {
