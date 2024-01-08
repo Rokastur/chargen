@@ -15,6 +15,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NamedEntityGraph(
+        name = "Character.account",
+        attributeNodes = @NamedAttributeNode("account")
+)
 public class Character extends BaseEntity {
 
     private String name;
@@ -25,6 +29,9 @@ public class Character extends BaseEntity {
 
     @Embedded
     private CharacterDescription description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Race race;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -43,8 +50,9 @@ public class Character extends BaseEntity {
     @JsonManagedReference
     private Set<AbilityScore> abilityScores = new HashSet<>();
 
-    @Enumerated(EnumType.STRING)
-    private EAlignment alignment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Alignment alignment;
 
     @OneToMany(
             mappedBy = "character",
@@ -71,8 +79,8 @@ public class Character extends BaseEntity {
             CascadeType.MERGE
     })
     @JoinTable(name = "character_feats",
-        joinColumns = @JoinColumn(name = "character_id"),
-        inverseJoinColumns = @JoinColumn(name = "feat_id"))
+            joinColumns = @JoinColumn(name = "character_id"),
+            inverseJoinColumns = @JoinColumn(name = "feat_id"))
     private Set<Feat> feats = new HashSet<>();
 
 

@@ -4,6 +4,7 @@ import com.chargen.api.entity.BaseEntity;
 import com.chargen.api.entity.character.Feat;
 import com.chargen.api.entity.character.Race;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
@@ -28,7 +29,7 @@ public class AbilityScoreModifier extends BaseEntity {
     private AbilityScore abilityScore;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonManagedReference
     private Race race;
 
     @ManyToMany(mappedBy = "abilityScoreModifiers")

@@ -3,6 +3,7 @@ package com.chargen.api.entity.character;
 import com.chargen.api.entity.BaseEntity;
 import com.chargen.api.entity.Ruleset;
 import com.chargen.api.entity.character.ability.Ability;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +43,7 @@ public class CharacterClass extends BaseEntity {
     private Set<Ability> abilities = new HashSet<>();
 
     @ManyToMany(mappedBy = "allowedClasses")
+    @JsonBackReference
     private Set<Ruleset> rulesets = new HashSet<>();
 
     private Integer initializeHitDice(EClass name) {

@@ -17,4 +17,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @EntityGraph(value = "graph.Account.campaigns")
     Account findOneById(Long id);
 
+    @EntityGraph(attributePaths = {"characters"})
+    Account findAccountWithCharactersById(Long id);
+
 }

@@ -7,6 +7,7 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import Campaign from "./components/Campaign";
 import CampaignDetails from "./components/CampaignDetails";
+import Character from "./components/Character";
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState(undefined);
@@ -33,6 +34,9 @@ const App = () => {
         <ul>
           <li>
             <Link to="/campaigns">campaigns</Link>
+          </li>
+          <li>
+            <Link to="/characters">characters</Link>
           </li>
           <li>
             <Link to="/">chargen</Link>
@@ -78,6 +82,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/campaigns" element={<Campaign />} />
         <Route path="/campaign/:id" element={<CampaignDetails />} />
+        <Route path="/characters" element={<Character />} />
       </Routes>
     </div>
   );
