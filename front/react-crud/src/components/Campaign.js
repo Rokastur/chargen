@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AuthService from "../services/auth.service";
 import CampaignService from "../services/campaign.service";
 import { Link } from "react-router-dom";
 
