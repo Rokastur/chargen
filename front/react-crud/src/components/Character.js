@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import CharacterService from "../services/character.service";
 import AlignmentService from "../services/alignment.service";
 import RaceService from "../services/race.serivce";
+import AbilityService from "../services/ability.service";
 import { Link } from "react-router-dom";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import InputAdornment from "@mui/material/InputAdornment";
 
 const Character = () => {
   const [characters, setCharacters] = useState([]);
@@ -16,6 +20,8 @@ const Character = () => {
   const [characterRace, setCharacterRace] = useState("");
   const [availableAlignments, setAvailableAlignments] = useState([]);
   const [availableRaces, setAvailableRaces] = useState([]);
+  const [availableAbilities, setAvailableAbilities] = useState([]);
+  const [abilityValues, setAbilityValues] = useState({}); // State to store ability values
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +30,7 @@ const Character = () => {
         name: characterName,
         alignment: characterAlignment,
         race: characterRace,
+        abilities: abilityValues,
       };
       const response = await CharacterService.createNewCharacter(characterData);
       console.log("Character created: ", response.data);
@@ -36,15 +43,13 @@ const Character = () => {
       setCharacterName("");
       setCharacterAlignment("");
       setCharacterRace("");
+      setAbilityValues({});
     } catch (error) {
       console.error("Error creating character: ", error);
     }
   };
 
   const onCharacterNameChange = (e) => setCharacterName(e.target.value);
-  const onCharacterAlignmentChange = (e) =>
-    setCharacterAlignment(e.target.value);
-  const onCharacterRaceChange = (e) => setCharacterRace(e.target.value);
 
   useEffect(() => {
     CharacterService.listOwnedCharacters()
@@ -75,6 +80,30 @@ const Character = () => {
         console.error("Error fetching races: ", error.response || error);
       });
   }, []);
+
+  useEffect(() => {
+    AbilityService.listAbilityByRuleset("DND5e")
+      .then((response) => {
+        setAvailableAbilities(response.data);
+        // Initialize ability values
+        const initialAbilityValues = response.data.reduce((acc, ability) => {
+          acc[ability.name] = ""; // Initialize each ability value as an empty string
+          return acc;
+        }, {});
+        setAbilityValues(initialAbilityValues);
+      })
+      .catch((error) => {
+        console.error("Error fetching abilities: ", error.response || error);
+      });
+  }, []);
+
+  // Handle ability value change
+  const handleAbilityChange = (abilityName, value) => {
+    setAbilityValues((prev) => ({
+      ...prev,
+      [abilityName]: value,
+    }));
+  };
 
   return (
     <div>
@@ -136,6 +165,28 @@ const Character = () => {
             ))}
           </RadioGroup>
         </FormControl>
+
+        {/* Dynamic ability input fields */}
+        {availableAbilities.map((ability) => (
+          <Box
+            key={ability.name}
+            sx={{ display: "flex", flexWrap: "wrap", m: 1 }}
+          >
+            <TextField
+              label={ability.name}
+              value={abilityValues[ability.name]}
+              onChange={(e) =>
+                handleAbilityChange(ability.name, e.target.value)
+              }
+              sx={{ width: "25ch" }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">score</InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+        ))}
 
         <button type="submit">Create New Character</button>
       </form>
