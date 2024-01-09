@@ -5,7 +5,8 @@ import com.chargen.api.entity.character.Alignment;
 import com.chargen.api.entity.character.EAlignment;
 import com.chargen.api.entity.character.ERace;
 import com.chargen.api.entity.character.Race;
-import com.chargen.api.repository.RaceRepository;
+import com.chargen.api.entity.character.ability.Ability;
+import com.chargen.api.entity.character.ability.EAbility;
 import com.chargen.api.repository.RulesetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -26,6 +27,7 @@ public class DataLoader implements ApplicationRunner {
         ruleset.setName("DND5e");
         createAlignments(ruleset);
         createRaces(ruleset);
+        createAbilities(ruleset);
         rulesetRepository.save(ruleset);
     }
 
@@ -43,6 +45,14 @@ public class DataLoader implements ApplicationRunner {
             Race race = new Race();
             race.setName(eRace.name());
             ruleset.addRace(race);
+        }
+    }
+
+    private void createAbilities(Ruleset ruleset) {
+        for (EAbility eAbility : EnumSet.allOf(EAbility.class)) {
+            Ability ability = new Ability();
+            ability.setName(eAbility.name());
+            ruleset.addAbility(ability);
         }
     }
 }

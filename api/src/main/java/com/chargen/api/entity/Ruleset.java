@@ -1,6 +1,7 @@
 package com.chargen.api.entity;
 
 import com.chargen.api.entity.character.*;
+import com.chargen.api.entity.character.ability.Ability;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -91,6 +92,21 @@ public class Ruleset extends BaseEntity {
     )
     @JsonManagedReference
     private Set<Alignment> allowedAlignments = new HashSet<>();
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "ruleset_abilities",
+            joinColumns = @JoinColumn(name = "ruleset_id"),
+            inverseJoinColumns = @JoinColumn(name = "ability_id"))
+    @JsonManagedReference
+    private Set<Ability> allowedAbilities = new HashSet<>();
+
+    public void addAbility(Ability ability) {
+        allowedAbilities.add(ability);
+        ability.getRuleset().add(this);
+    }
 
     public void addAlignment(Alignment alignment) {
         allowedAlignments.add(alignment);

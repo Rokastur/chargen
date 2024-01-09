@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,7 +19,9 @@ public class CharacterDto {
 
     private String race;
 
-    List<CharacterClassDto> characterClassDtos = new ArrayList<>();
+    private List<CharacterClassDto> characterClassDtos = new ArrayList<>();
+
+    private Map<String, Integer> abilities = new HashMap<>();
 
     @Getter
     @Setter
