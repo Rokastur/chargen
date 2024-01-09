@@ -5,7 +5,6 @@ import com.chargen.api.entity.Account;
 import com.chargen.api.entity.character.Character;
 import com.chargen.api.entity.character.*;
 import com.chargen.api.entity.character.ability.AbilityScore;
-import com.chargen.api.entity.character.ability.EAbility;
 import com.chargen.api.repository.AccountRepository;
 import com.chargen.api.repository.AlignmentRepository;
 import com.chargen.api.repository.CharacterClassRepository;
@@ -15,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -45,7 +43,7 @@ public class CharacterService {
 
         setCharacterClasses(characterDto, character);
         setAlignment(characterDto, character);
-        setAbilityScores(character);
+        setAbilityScores(character, characterDto);
         setRace(characterDto, character);
 
         account.addCharacter(character);
@@ -82,13 +80,22 @@ public class CharacterService {
 
     }
 
-    private void setAbilityScores(Character character) {
-        for (EAbility EAbility : EAbility.values()) {
+//    private void setAbilityScores(Character character) {
+//        for (EAbility EAbility : EAbility.values()) {
+//            AbilityScore abilityScore = new AbilityScore();
+//            abilityScore.setEAbility(EAbility);
+//            int[] diceRollResult = diceRoller.roll(6, 4, true);
+//            int diceRollSum = Arrays.stream(diceRollResult).sum();
+//            abilityScore.setScore(diceRollSum);
+//            character.addAbilityScore(abilityScore);
+//        }
+//    }
+
+    private void setAbilityScores(Character character, CharacterDto dto) {
+        for (String abilityName : dto.getAbilities().keySet()) {
             AbilityScore abilityScore = new AbilityScore();
-            abilityScore.setEAbility(EAbility);
-            int[] diceRollResult = diceRoller.roll(6, 4, true);
-            int diceRollSum = Arrays.stream(diceRollResult).sum();
-            abilityScore.setScore(diceRollSum);
+            abilityScore.setName(abilityName);
+            abilityScore.setScore(dto.getAbilities().get(abilityName));
             character.addAbilityScore(abilityScore);
         }
     }

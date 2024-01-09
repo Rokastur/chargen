@@ -1,10 +1,10 @@
 package com.chargen.api.entity.character.ability;
 
 import com.chargen.api.entity.BaseEntity;
+import com.chargen.api.entity.Ruleset;
 import com.chargen.api.entity.character.CharacterClass;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +17,11 @@ import java.util.Set;
 @Setter
 public class Ability extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
-    private EAbility ability;
+    private String name;
+
+    @ManyToMany(mappedBy = "allowedAbilities")
+    @JsonBackReference
+    private Set<Ruleset> ruleset = new HashSet<>();
 
     @ManyToMany(mappedBy = "abilities")
     private Set<CharacterClass> characterClasses = new HashSet<>();
