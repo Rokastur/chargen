@@ -7,7 +7,7 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import Campaign from "./components/Campaign";
 import CampaignDetails from "./components/CampaignDetails";
-import Character from "./components/Character";
+import Character from "./components/character/Character";
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState(undefined);
